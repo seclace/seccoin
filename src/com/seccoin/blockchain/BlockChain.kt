@@ -1,9 +1,12 @@
 package com.seccoin.blockchain
 
+import com.seccoin.wallet.TransactionOutput
+
 class BlockChain {
     private val chain: MutableList<Block> = mutableListOf()
     private val difficulty = 5
     private val validPrefix = "0".repeat(difficulty)
+    val UTXO: MutableMap<String, TransactionOutput> = mutableMapOf()
 
     fun add(block: Block): Block {
         val minedBlock = if (isMined(block)) block else mine(block)
@@ -44,7 +47,13 @@ class BlockChain {
         }
 
         println("Mined: $minedBlock")
+        updateUTXO(minedBlock)
 
         return minedBlock
+    }
+
+    private fun updateUTXO(block: Block) {
+        block.transactions.flatMap { it.inputs }.map { it.hash }.forEach { UTXO.remove(it) }
+        block.transactions.flatMap { it.outputs }.forEach { UTXO[it.hash] = it }
     }
 }
