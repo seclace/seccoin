@@ -7,6 +7,7 @@ data class Block(
     val previousHash: String,
     val data: String,
     val timestamp: Long = Instant.now().toEpochMilli(),
+    val nonce: Long = 0,
     var hash: String = "",
 ) {
 
@@ -14,7 +15,7 @@ data class Block(
         hash = calculateHash()
     }
 
-    private fun calculateHash(): String {
-        return "$previousHash$timestamp$data".hash()
+    fun calculateHash(): String {
+        return "$previousHash$timestamp$data$nonce".hash()
     }
 }
