@@ -1,10 +1,9 @@
 package com.seccoin.blockchain
 
-import com.seccoin.miner.isMined
-import com.seccoin.miner.mine
-
 class BlockChain {
     private val chain: MutableList<Block> = mutableListOf()
+    private val difficulty = 5
+    private val validPrefix = "0".repeat(difficulty)
 
     fun add(block: Block): Block {
         val minedBlock = if (isMined(block)) block else mine(block)
@@ -30,5 +29,22 @@ class BlockChain {
                 return true
             }
         }
+    }
+
+    private fun isMined(block: Block): Boolean {
+        return block.hash.startsWith(validPrefix)
+    }
+
+    private fun mine(block: Block): Block {
+        println("Mining: $block")
+
+        var minedBlock = block.copy()
+        while (!isMined(minedBlock)) {
+            minedBlock = minedBlock.copy(nonce = minedBlock.nonce + 1)
+        }
+
+        println("Mined: $minedBlock")
+
+        return minedBlock
     }
 }
