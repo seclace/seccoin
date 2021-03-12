@@ -11,5 +11,5 @@ fun main() {
     val block3 = Block(minedBlock2.hash, "I'm the third block!")
     blockChain.add(block3)
 
-    println("isValid ? ${blockChain.isValid()}")
+    println("Is blockchain valid? ${blockChain.isValid()}")
 }
